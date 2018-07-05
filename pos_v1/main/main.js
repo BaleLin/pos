@@ -2,13 +2,13 @@
 let sum = 0;
 let saveMoney = 0;
 
-function calculateItemNum(buyBarcode) {
-  var codeNumObj = [];
-  var soonObj = {};
-  for (var i = 0; i < buyBarcode.length; i++) {
-    if (buyBarcode[i].indexOf("-") > 0) {
+function formatShopcar(buyBarcode) {
+  let codeNumObj = [];
+  let soonObj = {};
+  for (let i of buyBarcode) {
+    if (i.indexOf("-") > 0) {
       //含有特殊的
-      var spl = buyBarcode[i].split("-");
+      let spl = i.split("-");
       if (soonObj.hasOwnProperty(spl[0])) {
         soonObj[spl[0]] = soonObj[spl[0]] + parseFloat(spl[1]);
       } else {
@@ -16,33 +16,32 @@ function calculateItemNum(buyBarcode) {
       }
     }
     else {
-      if (soonObj.hasOwnProperty(buyBarcode[i])) {
-        soonObj[buyBarcode[i]]++;
+      if (soonObj.hasOwnProperty(i)) {
+        soonObj[i]++;
       }
       else {
-        soonObj[buyBarcode[i]] = 1;
+        soonObj[i] = 1;
       }
     }
   }
   // console.log(soonObj);
-  for (var j in soonObj) {
+  for (let j in soonObj) {
     codeNumObj.push({barcode: j, num: soonObj[j]});
   }
   return codeNumObj;
 }
 
 function mergeAllItem(codeNumObj, loadAllItems) {
-  var allItems = [];
-  for (var i = 0; i < codeNumObj.length; i++) {
-    for (var j = 0; j < loadAllItems.length; j++) {
-      if (codeNumObj[i].barcode == loadAllItems[j].barcode) {
-        var soonObjOfAll = {};
-        soonObjOfAll.barcode = codeNumObj[i].barcode;
-        soonObjOfAll.num = codeNumObj[i].num;
-        soonObjOfAll.name = loadAllItems[j].name;
-        soonObjOfAll.unit = loadAllItems[j].unit;
-        soonObjOfAll.price = parseFloat((loadAllItems[j].price));
-        soonObjOfAll.price = loadAllItems[j].price;
+  let allItems = [];
+  for (let codeNumOb of codeNumObj) {
+    for (let loadAllItem of loadAllItems) {
+      if (codeNumOb.barcode === loadAllItem.barcode) {
+        let soonObjOfAll = {};
+        soonObjOfAll.barcode = codeNumOb.barcode;
+        soonObjOfAll.num = codeNumOb.num;
+        soonObjOfAll.name = loadAllItem.name;
+        soonObjOfAll.unit = loadAllItem.unit;
+        soonObjOfAll.price = loadAllItem.price;
         allItems.push(soonObjOfAll);
       }
     }
@@ -51,7 +50,7 @@ function mergeAllItem(codeNumObj, loadAllItems) {
 }
 
 function calculateSum(allItems) {
-  for (var i = 0; i < allItems.length; i++) {
+  for (let i = 0; i < allItems.length; i++) {
     allItems[i].allPrice = (allItems[i].price) * (allItems[i].num);
     sum += allItems[i].allPrice;
   }
@@ -59,9 +58,9 @@ function calculateSum(allItems) {
 }
 
 function cutPrice(AllItems, loadPromotions) {
-  for (var i = 0; i < AllItems.length; i++) {
+  for (let i = 0; i < AllItems.length; i++) {
     //console.log(loadPromotions[0].barcodes);
-    var sooCom = loadPromotions[0].barcodes;
+    let sooCom = loadPromotions[0].barcodes;
     if (sooCom.includes(AllItems[i].barcode)) {
       if (AllItems[i].num >= 2) {
         AllItems[i].allPrice = AllItems[i].allPrice - AllItems[i].price;
@@ -72,14 +71,7 @@ function cutPrice(AllItems, loadPromotions) {
   }
   return AllItems;
 }
-
-function printReceipt(tags) {
-  var loada = loadAllItems();
-  var cut = loadPromotions();
-  var clau = calculateItemNum(tags);
-  var ASD = mergeAllItem(clau, loada);
-  var cluAll = calculateSum(ASD);
-  var afterDiscount = cutPrice(cluAll, cut);
+function productReceip(afterDiscount) {
   let str = "***<没钱赚商店>收据***\n";
   for (let item of afterDiscount) {
     let price = item.price.toFixed(2);
@@ -87,6 +79,15 @@ function printReceipt(tags) {
     str += "名称：" + item.name + "，数量：" + item.num + item.unit + "，单价：" + price + "(元)，小计：" + littlePrice + "(元)\n";
   }
   str += "----------------------\n总计：" + sum.toFixed(2) + "(元)\n节省：" + saveMoney.toFixed(2) + "(元)\n**********************";
-
+  console.log(str);
+}
+function printReceipt(tags) {
+  let load_data = loadAllItems();
+  let cut_data = loadPromotions();
+  let shopcar_data= formatShopcar(tags);
+  let merge_data = mergeAllItem(shopcar_data, load_data);
+  let calculateSum_data = calculateSum(merge_data);
+  let afterDiscount = cutPrice(calculateSum_data, cut_data);
+  productReceip(afterDiscount);
 }
 

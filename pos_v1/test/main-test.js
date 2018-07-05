@@ -44,10 +44,36 @@ describe('test calculateItemNum()', () => {
       'ITEM000005',
       'ITEM000005-2',
     ];
-    const actualText1 = JSON.stringify(calculateItemNum(tags));
+    const actualText1 = JSON.stringify(formatShopcar(tags));
     //then
     const text_codeNum = [{barcode:'ITEM000001',num:5},{barcode:'ITEM000003',num:2.5},{barcode:'ITEM000005',num:3}];
     expect(actualText1).toBe(JSON.stringify(text_codeNum));
+
+  });
+});
+describe('test mergeAllItem()', () => {
+
+  it('should print', function () {
+    //when
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+    let load_data = loadAllItems();
+    let cut_data = loadPromotions();
+    let shopcar_data= formatShopcar(tags);
+    let merge_data = mergeAllItem(shopcar_data, load_data);
+    const actualText2 = JSON.stringify(merge_data);
+    console.log(actualText2);
+    //then
+    const text_codeNum = [{barcode:'ITEM000001',num:5,name:'雪碧',unit:'瓶',price:3},{barcode:'ITEM000003',num:2.5,name:'荔枝',unit:'斤',price:15},{barcode:'ITEM000005',num:3,name:'方便面',unit:'袋',price:4.5}];
+    expect(actualText2).toBe(JSON.stringify(text_codeNum));
 
   });
 });
