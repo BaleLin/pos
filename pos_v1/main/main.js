@@ -29,7 +29,6 @@ function calculateItemNum(buyBarcode) {
     codeNumObj.push({barcode: j, num: soonObj[j]});
   }
   return codeNumObj;
-  return codeNumObj;
 }
 
 function mergeAllItem(codeNumObj, loadAllItems) {
@@ -88,7 +87,6 @@ function printReceipt(tags) {
     str += "名称：" + item.name + "，数量：" + item.num + item.unit + "，单价：" + price + "(元)，小计：" + littlePrice + "(元)\n";
   }
   str += "----------------------\n总计：" + sum.toFixed(2) + "(元)\n节省：" + saveMoney.toFixed(2) + "(元)\n**********************";
-  console.log(str);
-  return str;
+
 }
 
