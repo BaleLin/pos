@@ -102,3 +102,30 @@ describe('test calculateSum()', () => {
 
   });
 });
+describe('test afterDiscount()', () => {
+
+  it('should print', function () {
+    //when
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+    let load_data = loadAllItems();
+    let cut_data = loadPromotions();
+    let shopcar_data= formatShopcar(tags);
+    let merge_data = mergeAllItem(shopcar_data, load_data);
+    let calculateSum_data = calculateSum(merge_data);
+    let afterDiscount = cutPrice(calculateSum_data, cut_data);
+    const actualText4 = JSON.stringify(afterDiscount);
+    //then
+    const text_afterDiscount = [{barcode:'ITEM000001',num:5,name:'雪碧',unit:'瓶',price:3,allPrice:12},{barcode:'ITEM000003',num:2.5,name:'荔枝',unit:'斤',price:15,allPrice:37.5},{barcode:'ITEM000005',num:3,name:'方便面',unit:'袋',price:4.5,allPrice:9}];
+    expect(actualText4).toBe(JSON.stringify(text_afterDiscount));
+
+  });
+});
