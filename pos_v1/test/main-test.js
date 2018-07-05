@@ -27,7 +27,27 @@ describe('pos', () => {
 总计：58.50(元)
 节省：7.50(元)
 **********************`;
-
     expect(console.log).toHaveBeenCalledWith(expectText);
+
+  });
+});
+describe('test calculateItemNum()', () => {
+  it('should print', function () {
+    //when
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+    const actualText1 = JSON.stringify(calculateItemNum(tags));
+    //then
+    const text_codeNum = [{barcode:'ITEM000001',num:5},{barcode:'ITEM000003',num:2.5},{barcode:'ITEM000005',num:3}];
+    expect(actualText1).toBe(JSON.stringify(text_codeNum));
+
   });
 });
