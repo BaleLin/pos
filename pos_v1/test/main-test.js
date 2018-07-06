@@ -43,7 +43,7 @@ describe('test calculateItemNum()', () => {
       'ITEM000005',
       'ITEM000005-2',
     ];
-    const actualText1 = JSON.stringify(formatShopcar(tags));
+    const actualText1 = JSON.stringify(countShopcar(tags));
     //then
     const text_codeNum = [{barcode:'ITEM000001',num:5},{barcode:'ITEM000003',num:2.5},{barcode:'ITEM000005',num:3}];
     expect(actualText1).toBe(JSON.stringify(text_codeNum));
@@ -66,7 +66,7 @@ describe('test mergeAllItem()', () => {
     ];
     let load_data = loadAllItems();
     let cut_data = loadPromotions();
-    let shopcar_data= formatShopcar(tags);
+    let shopcar_data= countShopcar(tags);
     let merge_data = mergeAllItem(shopcar_data, load_data);
     const actualText2 = JSON.stringify(merge_data);
     console.log(actualText2);
@@ -92,7 +92,7 @@ describe('test calculateSum()', () => {
     ];
     let load_data = loadAllItems();
     let cut_data = loadPromotions();
-    let shopcar_data= formatShopcar(tags);
+    let shopcar_data= countShopcar(tags);
     let merge_data = mergeAllItem(shopcar_data, load_data);
     let calculateSum_data = calculateSum(merge_data);
     const actualText3 = JSON.stringify(calculateSum_data);
@@ -118,7 +118,7 @@ describe('test afterDiscount()', () => {
     ];
     let load_data = loadAllItems();
     let cut_data = loadPromotions();
-    let shopcar_data= formatShopcar(tags);
+    let shopcar_data= countShopcar(tags);
     let merge_data = mergeAllItem(shopcar_data, load_data);
     let calculateSum_data = calculateSum(merge_data);
     let afterDiscount = cutPrice(calculateSum_data, cut_data);

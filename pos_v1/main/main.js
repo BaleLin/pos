@@ -2,7 +2,7 @@
 let sum = 0;
 let saveMoney = 0;
 
-function formatShopcar(buyBarcode) {
+function countShopcar(buyBarcode) {
   let codeNumObj = [];
   let soonObj = {};
   for (let i of buyBarcode) {
@@ -63,7 +63,7 @@ function cutPrice(AllItems, loadPromotions) {
     let sooCom = loadPromotions[0].barcodes;
     if (sooCom.includes(AllItems[i].barcode)) {
       if (AllItems[i].num >= 2) {
-        AllItems[i].allPrice = AllItems[i].allPrice - AllItems[i].price;
+        AllItems[i].allPrice -= AllItems[i].price;
         saveMoney += AllItems[i].price;
         sum -= AllItems[i].price;
       }
@@ -76,15 +76,17 @@ function productReceip(afterDiscount) {
   for (let item of afterDiscount) {
     let price = item.price.toFixed(2);
     let littlePrice = item.allPrice.toFixed(2);
-    str += "名称：" + item.name + "，数量：" + item.num + item.unit + "，单价：" + price + "(元)，小计：" + littlePrice + "(元)\n";
+    //str += `名称： {$item.name}  ，数量：  item.num + item.unit + ，单价： + price + (元)，小计： + littlePrice + (元)\n`;
+    str +=`名称：${item.name}，数量：${item.num}${item.unit}，单价：${price}(元)，小计：${littlePrice}(元)\n`;
   }
-  str += "----------------------\n总计：" + sum.toFixed(2) + "(元)\n节省：" + saveMoney.toFixed(2) + "(元)\n**********************";
+
+  str += `----------------------\n总计：${ sum.toFixed(2)}(元)\n节省：${saveMoney.toFixed(2)}(元)\n**********************`;
   console.log(str);
 }
 function printReceipt(tags) {
   let load_data = loadAllItems();
   let cut_data = loadPromotions();
-  let shopcar_data= formatShopcar(tags);
+  let shopcar_data= countShopcar(tags);
   let merge_data = mergeAllItem(shopcar_data, load_data);
   let calculateSum_data = calculateSum(merge_data);
   let afterDiscount = cutPrice(calculateSum_data, cut_data);
