@@ -2,13 +2,13 @@
 let sum = 0;
 let saveMoney = 0;
 
-function countShopcar(buyBarcode) {
+function countShopcar(buyBarcodes) {
   let codeNumObj = [];
   let soonObj = {};
-  for (let i of buyBarcode) {
-    if (i.indexOf("-") > 0) {
+  for (let buyBarcode of buyBarcodes) {
+    if (buyBarcode.indexOf("-") > 0) {
       //含有特殊的
-      let spl = i.split("-");
+      let spl = buyBarcode.split("-");
       if (soonObj.hasOwnProperty(spl[0])) {
         soonObj[spl[0]] = soonObj[spl[0]] + parseFloat(spl[1]);
       } else {
@@ -16,11 +16,11 @@ function countShopcar(buyBarcode) {
       }
     }
     else {
-      if (soonObj.hasOwnProperty(i)) {
-        soonObj[i]++;
+      if (soonObj.hasOwnProperty(buyBarcode)) {
+        soonObj[buyBarcode]++;
       }
       else {
-        soonObj[i] = 1;
+        soonObj[buyBarcode] = 1;
       }
     }
   }
@@ -50,22 +50,21 @@ function mergeAllItem(codeNumObj, loadAllItems) {
 }
 
 function calculateSum(allItems) {
-  for (let i = 0; i < allItems.length; i++) {
-    allItems[i].allPrice = (allItems[i].price) * (allItems[i].num);
-    sum += allItems[i].allPrice;
+  for (let item of allItems) {
+    item.allPrice = (item.price) * (item.num);
+    sum += item.allPrice;
   }
   return allItems;
 }
 
 function cutPrice(AllItems, loadPromotions) {
-  for (let i = 0; i < AllItems.length; i++) {
-    //console.log(loadPromotions[0].barcodes);
+  for (let items of AllItems) {
     let sooCom = loadPromotions[0].barcodes;
-    if (sooCom.includes(AllItems[i].barcode)) {
-      if (AllItems[i].num >= 2) {
-        AllItems[i].allPrice -= AllItems[i].price;
-        saveMoney += AllItems[i].price;
-        sum -= AllItems[i].price;
+    if (sooCom.includes(items.barcode)) {
+      if (items.num >= 2) {
+        items.allPrice -= items.price;
+        saveMoney += items.price;
+        sum -= items.price;
       }
     }
   }
