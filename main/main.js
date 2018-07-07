@@ -1,7 +1,7 @@
 'use strict';
 const {loadAllItems,loadPromotions } = require('../spec/fixtures');
 
-const printReceipt=tags=> {
+    function printReceipt(tags){
     let load_data = loadAllItems();
     let cut_data = loadPromotions();
     let hasformatBrarcodes=formattedBarcode(tags);
@@ -14,9 +14,9 @@ const printReceipt=tags=> {
     productReceip(afterDiscount,saveMoney_data,sum_data);
   }
 //格式化条形码
-const formattedBarcode=tags=>{
+    function formattedBarcode(tags){
     let hasformatBrarcodes = [];
-    for(let tag of tags){
+    tags.map(tag=>{
         let tempObj = {};
         if(tag.indexOf("-")==-1){
             tempObj.barcode = tag;
@@ -27,7 +27,7 @@ const formattedBarcode=tags=>{
             tempObj.num = parseFloat(spl[1]);
         }
         hasformatBrarcodes.push(tempObj);
-    }
+    });
     //console.info(hasformatBrarcodes);
     return hasformatBrarcodes;
 }
@@ -55,7 +55,7 @@ const countShopcar=hasformatBrarcodes=> {
     return cartItems;
 }
 //汇总商品信息
-const mergeAllItem=(codeNumObj, loadAllItems)=> {
+  function mergeAllItem(codeNumObj, loadAllItems){
   let allItems = [];
   for (let codeNumOb of codeNumObj) {
     for (let loadAllItem of loadAllItems) {
@@ -73,14 +73,14 @@ const mergeAllItem=(codeNumObj, loadAllItems)=> {
   return allItems;
 }
 //计算小计
-const calculateAllPrice=allItems=> {
+  function calculateAllPrice(allItems) {
   for (let item of allItems) {
     item.allPrice = (item.price) * (item.num);
   }
   return allItems;
 }
 //计算结账总价
-const calculateSum=allItems=> {
+ function calculateSum(allItems){
   let sum = 0;
   for (let item of allItems) {
     sum += item.allPrice_after;
@@ -91,7 +91,7 @@ const calculateSum=allItems=> {
   return sum;
 }
 //获取节约的钱
-const getSaveMoney=AllItems=> {
+function getSaveMoney(AllItems){
   let savePrice = 0;
   for(let AllItem of AllItems){
     if(AllItem.allPrice !== AllItem.allPrice_after){
@@ -105,7 +105,7 @@ const getSaveMoney=AllItems=> {
 
 }
 //优惠折算
-const cutPrice=(AllItems, loadPromotions)=> {
+  function cutPrice(AllItems, loadPromotions) {
   for (let items of AllItems) {
     let sooCom = loadPromotions[0].barcodes;
     if (sooCom.includes(items.barcode)) {
@@ -118,7 +118,7 @@ const cutPrice=(AllItems, loadPromotions)=> {
   }
   return AllItems;
 }
-const productReceip=(afterDiscount,saveMoney_data,sum_data)=> {
+ function productReceip(afterDiscount,saveMoney_data,sum_data){
   let str = "***<没钱赚商店>收据***\n";
   for (let item of afterDiscount) {
     let price = item.price.toFixed(2);
