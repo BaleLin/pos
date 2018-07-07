@@ -141,6 +141,7 @@ module.exports = {
     getSaveMoney,
     cutPrice,
     productReceip,
-    printReceipt
+    printReceipt,
+    calculateSum
 
 }
